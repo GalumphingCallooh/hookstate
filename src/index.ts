@@ -1472,6 +1472,10 @@ class StateMethodsImpl<S> implements StateMethods<S>, StateMethodsDestroy, Subsc
             },
             getter,
             (_, key, value) => {
+                if (typeof key === 'symbol') {
+                    return _[key];
+                }
+
                 throw new StateInvalidUsageError(this.path, ErrorId.SetProperty_State)
             },
             false) as unknown as State<S>;
