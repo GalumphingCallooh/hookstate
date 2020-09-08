@@ -1471,9 +1471,9 @@ class StateMethodsImpl<S> implements StateMethods<S>, StateMethodsDestroy, Subsc
                 return this.valueSource
             },
             getter,
-            (_, key, value) => {
+            (_, key, value, receiver) => {
                 if (typeof key === 'symbol') {
-                    return Reflect.set(_, key, value);
+                    return Reflect.set(_, key, value, receiver);
                 }
 
                 throw new StateInvalidUsageError(this.path, ErrorId.SetProperty_State)
