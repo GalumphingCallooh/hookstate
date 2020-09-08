@@ -1621,11 +1621,19 @@ function proxyWrap(
         get: propertyGetter,
         set: propertySetter,
         deleteProperty: (target, p) => {
+            if (typeof p === 'symbol') {
+                return Reflect.deleteProperty(target, p);
+            }
+
             return onInvalidUsage(isValueProxy ?
                 ErrorId.DeleteProperty_State :
                 ErrorId.DeleteProperty_Value)
         },
         defineProperty: (target, p, attributes) => {
+            if (typeof p === 'symbol') {
+                return Reflect.defineProperty(target, p, attributes);
+            }
+
             return onInvalidUsage(isValueProxy ?
                 ErrorId.DefineProperty_State :
                 ErrorId.DefineProperty_Value)
