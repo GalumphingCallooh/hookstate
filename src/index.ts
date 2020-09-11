@@ -1441,6 +1441,14 @@ class StateMethodsImpl<S> implements StateMethods<S>, StateMethodsDestroy, Subsc
             }
             return this.nested(key.toString() as keyof S)
         }
+        // tslint:disable-next-line: no-any
+        const setter = (_: object, key: PropertyKey, value: any, receiver: object) => {
+            if (typeof key === 'symbol') {
+                return Reflect.set(_, key, value, receiver);
+            }
+
+            throw new StateInvalidUsageError(this.path, ErrorId.SetProperty_State)
+        }
         
         if (IsNoProxy) {
             // minimal support for IE11
@@ -1471,14 +1479,10 @@ class StateMethodsImpl<S> implements StateMethods<S>, StateMethodsDestroy, Subsc
                 return this.valueSource
             },
             getter,
-            (_, key, value, receiver) => {
-                if (typeof key === 'symbol') {
-                    return Reflect.set(_, key, value, receiver);
-                }
+            setter,
+            false
+        ) as unknown as State<S>;
 
-                throw new StateInvalidUsageError(this.path, ErrorId.SetProperty_State)
-            },
-            false) as unknown as State<S>;
         return this.selfCache
     }
     
