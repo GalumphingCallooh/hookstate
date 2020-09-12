@@ -1622,8 +1622,20 @@ function proxyWrap(
             }
             return false;
         },
-        get: propertyGetter,
-        set: propertySetter,
+        get: (target, propertyKey) => {
+            if (typeof propertyKey === 'symbol') {
+                Reflect.get(target, propertyKey);
+            } 
+
+            return propertyGetter(target, propertyKey)
+        },
+        set: (target, propertyKey, value, receiver) => {
+            if (typeof propertyKey === 'symbol') {
+                Reflect.set(target, propertyKey, value, receiver);
+            } 
+
+            return propertySetter(target, propertyKey, value, receiver);
+        },
         deleteProperty: (target, p) => {
             if (typeof p === 'symbol') {
                 return Reflect.deleteProperty(target, p);
