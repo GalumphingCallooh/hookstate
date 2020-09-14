@@ -1420,7 +1420,7 @@ class StateMethodsImpl<S> implements StateMethods<S>, StateMethodsDestroy, Subsc
             const currentValue = this.get(); // IE11 marks this as downgraded
             this.isDowngraded = currentDowngraded; // relevant for IE11 only
             if (// if currentValue is primitive type
-                (typeof currentValue !== 'object' || currentValue === null) &&
+                (typeof currentValue !== 'object' || typeof currentValue !== 'symbol' || currentValue === null) &&
                 // if promised, it will be none
                 currentValue !== none) {
                 throw new StateInvalidUsageError(this.path, ErrorId.GetStatePropertyWhenPrimitive)
