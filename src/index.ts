@@ -1624,14 +1624,14 @@ function proxyWrap(
         },
         get: (target, propertyKey) => {
             if (typeof propertyKey === 'symbol') {
-                Reflect.get(target, propertyKey);
+                return Reflect.get(target, propertyKey);
             } 
 
             return propertyGetter(target, propertyKey)
         },
         set: (target, propertyKey, value, receiver) => {
             if (typeof propertyKey === 'symbol') {
-                Reflect.set(target, propertyKey, value, receiver);
+                return Reflect.set(target, propertyKey, value, receiver);
             } 
 
             return propertySetter(target, propertyKey, value, receiver);
